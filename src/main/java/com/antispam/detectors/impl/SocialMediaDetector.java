@@ -13,7 +13,12 @@ public class SocialMediaDetector implements ISpamDetector {
     );
 
     private static final Pattern SEARCH_SOCIAL = Pattern.compile(
-        "\\b(search|watch|check out|visit)\\b.{0,50}\\b(youtube|y[o0]u[ -]?t[u]?be?|facebook|twitter|twitch|instagram)\\b",
+        "\\b(search|watch|check out|visit|look)\\b.{0,50}\\b(on )?(youtube|y[o0]u[ -]?t[u]?be?|facebook|twitter|twitch|instagram)\\b",
+        Pattern.CASE_INSENSITIVE
+    );
+
+    private static final Pattern DISCORD_VARIATIONS = Pattern.compile(
+        "\\b(disc[oöô]rd|díscord|discörd)\\b.{0,30}\\b(gg|dot|giveaway|join)\\b",
         Pattern.CASE_INSENSITIVE
     );
 
@@ -56,6 +61,10 @@ public class SocialMediaDetector implements ISpamDetector {
 
         if (DONT_SEARCH.matcher(originalText).find()) {
             return DetectionResult.detected("social: dont-search");
+        }
+
+        if (DISCORD_VARIATIONS.matcher(originalText).find()) {
+            return DetectionResult.detected("social: discord-variation");
         }
 
         return DetectionResult.notDetected();

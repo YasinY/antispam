@@ -334,6 +334,46 @@ public class KeywordComboDetector implements ISpamDetector {
             "Trade up challenge"
         ));
 
+        combos.add(new KeywordCombo(
+            Arrays.asList("show", "bank value"),
+            "Show bank value"
+        ));
+
+        combos.add(new KeywordCombo(
+            Arrays.asList("show", "bank wealth"),
+            "Show bank wealth"
+        ));
+
+        combos.add(new KeywordCombo(
+            Arrays.asList("show", "total bank"),
+            "Show total bank"
+        ));
+
+        combos.add(new KeywordCombo(
+            Arrays.asList("doubling", "banks"),
+            "Doubling banks"
+        ));
+
+        combos.add(new KeywordCombo(
+            Arrays.asList("first", "shows"),
+            "First who shows"
+        ));
+
+        combos.add(new KeywordCombo(
+            Arrays.asList("coronavirus", "help"),
+            "Coronavirus scam"
+        ));
+
+        combos.add(new KeywordCombo(
+            Arrays.asList("bitcoin millionaire", "coronavirus"),
+            "Bitcoin coronavirus scam"
+        ));
+
+        combos.add(new KeywordCombo(
+            Arrays.asList("late", "christmas"),
+            "Late christmas scam"
+        ));
+
         return combos;
     }
 }

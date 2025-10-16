@@ -32,6 +32,11 @@ public class CCSpamDetector implements ISpamDetector {
         Pattern.CASE_INSENSITIVE
     );
 
+    private static final Pattern SPECIFIC_CC_NAMES = Pattern.compile(
+        "\\b(workless|wk swap|rc swap|caw cc|prayer community)\\b",
+        Pattern.CASE_INSENSITIVE
+    );
+
     @Override
     public DetectionResult detect(String originalText, String normalizedText) {
         if (originalText == null || originalText.isEmpty()) {
@@ -56,6 +61,10 @@ public class CCSpamDetector implements ISpamDetector {
 
         if (DROP_PARTY_CC.matcher(originalText).find()) {
             return DetectionResult.detected("cc-spam: drop-party");
+        }
+
+        if (SPECIFIC_CC_NAMES.matcher(originalText).find()) {
+            return DetectionResult.detected("cc-spam: specific-cc");
         }
 
         return DetectionResult.notDetected();

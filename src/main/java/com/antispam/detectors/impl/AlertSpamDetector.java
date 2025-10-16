@@ -57,6 +57,21 @@ public class AlertSpamDetector implements ISpamDetector {
         Pattern.CASE_INSENSITIVE
     );
 
+    private static final Pattern NEVER_GET_SCEPTRE = Pattern.compile(
+        "\\bnever (get|give)\\b.{0,30}\\bsceptre\\b",
+        Pattern.CASE_INSENSITIVE
+    );
+
+    private static final Pattern GLITCHES_TO_SCAM = Pattern.compile(
+        "\\b(use|using) glitches\\b.{0,30}\\b(to )?(scam|push|lur)\\b",
+        Pattern.CASE_INSENSITIVE
+    );
+
+    private static final Pattern BRING_YOU_TO = Pattern.compile(
+        "\\bbring you to\\b.{0,30}\\bunsafe\\b",
+        Pattern.CASE_INSENSITIVE
+    );
+
     @Override
     public DetectionResult detect(String originalText, String normalizedText) {
         if (originalText == null || originalText.isEmpty()) {
@@ -101,6 +116,18 @@ public class AlertSpamDetector implements ISpamDetector {
 
         if (DO_NOT_ATTEMPT.matcher(originalText).find()) {
             return DetectionResult.detected("alert-spam: do-not-attempt");
+        }
+
+        if (NEVER_GET_SCEPTRE.matcher(originalText).find()) {
+            return DetectionResult.detected("alert-spam: never-get-sceptre");
+        }
+
+        if (GLITCHES_TO_SCAM.matcher(originalText).find()) {
+            return DetectionResult.detected("alert-spam: glitches-scam");
+        }
+
+        if (BRING_YOU_TO.matcher(originalText).find()) {
+            return DetectionResult.detected("alert-spam: bring-unsafe");
         }
 
         return DetectionResult.notDetected();
