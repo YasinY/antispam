@@ -111,6 +111,8 @@ public class KeywordCategory {
                 "spare",
                 "someone spare me",
                 "someone give me",
+                "someone gift me",
+                "gift me",
                 "can somebody",
                 "can i have",
                 "can i get",
