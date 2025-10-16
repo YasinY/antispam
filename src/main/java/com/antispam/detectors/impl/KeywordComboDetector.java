@@ -225,28 +225,13 @@ public class KeywordComboDetector implements ISpamDetector {
         ));
 
         combos.add(new KeywordCombo(
-            Arrays.asList("need", "m"),
-            "Need m spam"
-        ));
-
-        combos.add(new KeywordCombo(
-            Arrays.asList("need", "mil"),
-            "Need mil spam"
-        ));
-
-        combos.add(new KeywordCombo(
-            Arrays.asList("need", "gp"),
-            "Need gp spam"
-        ));
-
-        combos.add(new KeywordCombo(
             Arrays.asList("need", "gold"),
             "Need gold spam"
         ));
 
         combos.add(new KeywordCombo(
-            Arrays.asList("need", "coins"),
-            "Need coins spam"
+            Arrays.asList("need", "gp"),
+            "Need gp spam"
         ));
 
         combos.add(new KeywordCombo(
@@ -332,6 +317,21 @@ public class KeywordComboDetector implements ISpamDetector {
         combos.add(new KeywordCombo(
             Arrays.asList("please", "some"),
             "Begging please some"
+        ));
+
+        combos.add(new KeywordCombo(
+            Arrays.asList("trading up", "challenge"),
+            "Trading up challenge"
+        ));
+
+        combos.add(new KeywordCombo(
+            Arrays.asList("tradeup", "challenge"),
+            "Tradeup challenge"
+        ));
+
+        combos.add(new KeywordCombo(
+            Arrays.asList("trade up", "challenge"),
+            "Trade up challenge"
         ));
 
         return combos;

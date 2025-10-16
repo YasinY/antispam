@@ -87,8 +87,13 @@ public class BeggarPatternMatcher {
             detectorChain.addDetector(new KeywordComboDetector());
         }
 
-        detectorChain.addDetector(new KeywordSpamDetector(allStandalone, substringKeywords));
-        detectorChain.addDetector(new CustomRegexDetector(customRegexPatterns));
+        if (config.enableKeywordDetector() && (!allStandalone.isEmpty() || !substringKeywords.isEmpty())) {
+            detectorChain.addDetector(new KeywordSpamDetector(allStandalone, substringKeywords));
+        }
+
+        if (!customRegexPatterns.isEmpty()) {
+            detectorChain.addDetector(new CustomRegexDetector(customRegexPatterns));
+        }
     }
 
     public boolean matches(String text) {

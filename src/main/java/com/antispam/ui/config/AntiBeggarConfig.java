@@ -135,7 +135,7 @@ public interface AntiBeggarConfig extends Config {
     @ConfigItem(
         keyName = "enableSpacedTextDetector",
         name = "Spaced text detector",
-        description = "Detects suspicious spacing patterns",
+        description = "Detects suspicious spacing patterns\nExample: 's e l l i n g  g o l d'",
         position = 0,
         section = detectorsSection
     )
@@ -146,7 +146,7 @@ public interface AntiBeggarConfig extends Config {
     @ConfigItem(
         keyName = "enableAlertSpamDetector",
         name = "Alert spam detector",
-        description = "Detects warning/scammer alert messages",
+        description = "Detects warning/scammer alert messages\nExample: '[Beware] Player123 is a scammer'",
         position = 1,
         section = detectorsSection
     )
@@ -157,7 +157,7 @@ public interface AntiBeggarConfig extends Config {
     @ConfigItem(
         keyName = "enableUrlSpamDetector",
         name = "URL spam detector",
-        description = "Detects URLs and website spam",
+        description = "Detects URLs and website spam\nExample: 'check out rsgold.com', 'discord.gg/scam'",
         position = 2,
         section = detectorsSection
     )
@@ -168,7 +168,7 @@ public interface AntiBeggarConfig extends Config {
     @ConfigItem(
         keyName = "enableRWTDetector",
         name = "RWT detector",
-        description = "Detects real-world trading (buying/selling items)",
+        description = "Detects real-world trading (buying/selling items)\nExample: 'Buying tbow 1200m', 'Sell me your bank for 10% extra'",
         position = 3,
         section = detectorsSection
     )
@@ -179,7 +179,7 @@ public interface AntiBeggarConfig extends Config {
     @ConfigItem(
         keyName = "enableGamblingDetector",
         name = "Gambling detector",
-        description = "Detects gambling/doubling money scams",
+        description = "Detects gambling/doubling money scams\nExample: 'Doubling money 100m max', '2x your items'",
         position = 4,
         section = detectorsSection
     )
@@ -190,7 +190,7 @@ public interface AntiBeggarConfig extends Config {
     @ConfigItem(
         keyName = "enableShowTradingScamDetector",
         name = "Show trading scam detector",
-        description = "Detects 'show me bank' type scams",
+        description = "Detects 'show me bank' type scams\nExample: 'Show me 900m bank and I give you 1800m'",
         position = 5,
         section = detectorsSection
     )
@@ -201,7 +201,7 @@ public interface AntiBeggarConfig extends Config {
     @ConfigItem(
         keyName = "enableCCSpamDetector",
         name = "CC spam detector",
-        description = "Detects clan chat spam",
+        description = "Detects clan chat spam\nExample: 'Join cc SWAP for best rates', 'Most trusted cc'",
         position = 6,
         section = detectorsSection
     )
@@ -212,7 +212,7 @@ public interface AntiBeggarConfig extends Config {
     @ConfigItem(
         keyName = "enableSocialMediaDetector",
         name = "Social media detector",
-        description = "Detects social media spam",
+        description = "Detects social media spam\nExample: 'Follow my twitch', 'Check out my youtube'",
         position = 7,
         section = detectorsSection
     )
@@ -223,7 +223,7 @@ public interface AntiBeggarConfig extends Config {
     @ConfigItem(
         keyName = "enableSuspiciousPatternDetector",
         name = "Suspicious pattern detector",
-        description = "Detects suspicious text patterns",
+        description = "Detects suspicious text patterns\nExample: 'b u y i n g', '!!!!!!!'",
         position = 8,
         section = detectorsSection
     )
@@ -234,11 +234,22 @@ public interface AntiBeggarConfig extends Config {
     @ConfigItem(
         keyName = "enableKeywordComboDetector",
         name = "Keyword combo detector",
-        description = "Detects keyword combinations",
+        description = "Detects keyword combinations\nExample: 'pls some items', 'free gold', 'need gp'",
         position = 9,
         section = detectorsSection
     )
     default boolean enableKeywordComboDetector() {
+        return true;
+    }
+
+    @ConfigItem(
+        keyName = "enableKeywordDetector",
+        name = "Keyword detector",
+        description = "Detects preset and custom keywords\nExample: 'selling', 'buying', 'burnt food', 'help'",
+        position = 10,
+        section = detectorsSection
+    )
+    default boolean enableKeywordDetector() {
         return true;
     }
 

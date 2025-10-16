@@ -29,6 +29,8 @@ import net.runelite.client.util.ImageUtil;
 import javax.inject.Inject;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -65,7 +67,7 @@ public class AntiBeggarPlugin extends Plugin {
     @Getter
     private FilterStatistics statistics;
 
-    private final java.util.Set<Integer> processedMessages = java.util.concurrent.ConcurrentHashMap.newKeySet();
+    private final Set<Integer> processedMessages = ConcurrentHashMap.newKeySet();
 
     @Override
     protected void startUp() {
@@ -141,6 +143,7 @@ public class AntiBeggarPlugin extends Plugin {
             case "enableSocialMediaDetector":
             case "enableSuspiciousPatternDetector":
             case "enableKeywordComboDetector":
+            case "enableKeywordDetector":
                 matcher.updatePreset(config.filterPreset());
                 break;
         }
@@ -170,25 +173,9 @@ public class AntiBeggarPlugin extends Plugin {
         final String name = messageNode.getName();
         final String message = messageNode.getValue();
 
-        ChatType chatType;
-
-        switch (chatMessageType) {
-            case PUBLICCHAT:
-            case MODCHAT:
-                if (!config.filterPublicChat()) {
-                    return;
-                }
-                chatType = ChatType.PUBLIC;
-                break;
-            case PRIVATECHAT:
-            case MODPRIVATECHAT:
-                if (!config.filterPrivateMessages()) {
-                    return;
-                }
-                chatType = ChatType.PRIVATE;
-                break;
-            default:
-                return;
+        ChatType chatType = getChatType(chatMessageType);
+        if (chatType == null) {
+            return;
         }
 
         if (whitelistManager.isWhitelisted(name)) {
@@ -196,45 +183,52 @@ public class AntiBeggarPlugin extends Plugin {
         }
 
         if (usernameFilter.isBlacklisted(name)) {
-            boolean alreadyProcessed = !processedMessages.add(messageId);
-
-            if (!alreadyProcessed) {
-                double filterTimeMs = (System.nanoTime() - startTime) / 1_000_000.0;
-                statistics.recordFilter(chatType, "username-blacklist");
-
-                if (config.showNotifications()) {
-                    sendFilterNotification(name, message, "username-blacklist", filterTimeMs);
-                }
-            }
-
-            if (config.showBlockedChat()) {
-                messageNode.setValue("[ - ]");
-                messageNode.setRuneLiteFormatMessage("[ - ]");
-            } else {
-                intStack[intStackSize - 3] = 0;
-            }
+            handleFilteredMessage(messageId, chatType, name, message, "username-blacklist", startTime, messageNode, intStack, intStackSize);
             return;
         }
 
         if (messageFilter.shouldFilter(message)) {
-            boolean alreadyProcessed = !processedMessages.add(messageId);
+            String keyword = matcher.getMatchedKeyword(message);
+            handleFilteredMessage(messageId, chatType, name, message, keyword, startTime, messageNode, intStack, intStackSize);
+        }
+    }
 
-            if (!alreadyProcessed) {
-                double filterTimeMs = (System.nanoTime() - startTime) / 1_000_000.0;
-                String keyword = matcher.getMatchedKeyword(message);
-                statistics.recordFilter(chatType, keyword);
+    private ChatType getChatType(ChatMessageType chatMessageType) {
+        switch (chatMessageType) {
+            case PUBLICCHAT:
+            case MODCHAT:
+                return config.filterPublicChat() ? ChatType.PUBLIC : null;
+            case PRIVATECHAT:
+            case MODPRIVATECHAT:
+                return config.filterPrivateMessages() ? ChatType.PRIVATE : null;
+            default:
+                return null;
+        }
+    }
 
-                if (config.showNotifications()) {
-                    sendFilterNotification(name, message, keyword, filterTimeMs);
-                }
+    private void handleFilteredMessage(int messageId, ChatType chatType, String name, String message,
+                                        String keyword, long startTime, MessageNode messageNode,
+                                        int[] intStack, int intStackSize) {
+        boolean alreadyProcessed = !processedMessages.add(messageId);
+
+        if (!alreadyProcessed) {
+            double filterTimeMs = (System.nanoTime() - startTime) / 1_000_000.0;
+            statistics.recordFilter(chatType, keyword);
+
+            if (config.showNotifications()) {
+                sendFilterNotification(name, message, keyword, filterTimeMs);
             }
+        }
 
-            if (config.showBlockedChat()) {
-                messageNode.setValue("[ - ]");
-                messageNode.setRuneLiteFormatMessage("[ - ]");
-            } else {
-                intStack[intStackSize - 3] = 0;
-            }
+        hideMessage(messageNode, intStack, intStackSize);
+    }
+
+    private void hideMessage(MessageNode messageNode, int[] intStack, int intStackSize) {
+        if (config.showBlockedChat()) {
+            messageNode.setValue("[ - ]");
+            messageNode.setRuneLiteFormatMessage("[ - ]");
+        } else {
+            intStack[intStackSize - 3] = 0;
         }
     }
 
