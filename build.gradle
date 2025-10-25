@@ -1,6 +1,7 @@
 
 plugins {
 	id 'java'
+	id 'jacoco'
 }
 
 repositories {
@@ -32,4 +33,40 @@ sourceCompatibility = '1.8'
 
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
+}
+
+// JaCoCo Configuration for Code Coverage
+jacoco {
+	toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+	dependsOn test
+
+	reports {
+		xml.enabled true
+		html.enabled true
+		csv.enabled false
+
+		html.destination file("${buildDir}/reports/jacoco/html")
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+				'**/ui/**',
+				'**/plugin/PluginRunner.class'
+			])
+		}))
+	}
+}
+
+test {
+	finalizedBy jacocoTestReport
+}
+
+task coverage {
+	dependsOn test, jacocoTestReport
+	description = 'Runs tests and generates coverage report'
+	group = 'verification'
 }
