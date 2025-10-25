@@ -213,4 +213,25 @@ public class KeywordSpamDetectorTest {
         assertTrue(result.isDetected());
         assertEquals("selling", result.getKeyword());
     }
+
+    @Test
+    public void testNegationPatternAnywhere() {
+        // "selling" appears first, then "not selling" appears later
+        // hasNegationBefore will check before first "selling" and find no negation
+        // Then the pattern check should find "not selling"
+        DetectionResult result = detector.detect("selling items but I'm not selling gold", "");
+        assertFalse(result.isDetected());
+    }
+
+    @Test
+    public void testDontKeywordPattern() {
+        DetectionResult result = detector.detect("gold is good but dont gold farm", "");
+        assertFalse(result.isDetected());
+    }
+
+    @Test
+    public void testNoKeywordPattern() {
+        DetectionResult result = detector.detect("gold diggers but no gold here", "");
+        assertFalse(result.isDetected());
+    }
 }

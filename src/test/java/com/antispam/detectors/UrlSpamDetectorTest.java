@@ -86,6 +86,18 @@ public class UrlSpamDetectorTest {
     }
 
     @Test
+    public void testDiscordLinkExact() {
+        DetectionResult result = detector.detect("join discord . gg now", "");
+        assertTrue(result.isDetected());
+    }
+
+    @Test
+    public void testDiscordDotGgWord() {
+        DetectionResult result = detector.detect("discord d0t gg giveaway", "");
+        assertTrue(result.isDetected());
+    }
+
+    @Test
     public void testSubstitutionDomainCom() {
         DetectionResult result = detector.detect("rsgold.c0m for gold", "");
         assertTrue(result.isDetected());
@@ -111,6 +123,18 @@ public class UrlSpamDetectorTest {
         DetectionResult result = detector.detect("contact us @ rsgold.com", "");
         assertTrue(result.isDetected());
         assertTrue(result.getKeyword() != null && result.getKeyword().contains("url"));
+    }
+
+    @Test
+    public void testAtDomainVariations() {
+        DetectionResult result = detector.detect("msg @goldsite . gg", "");
+        assertTrue(result.isDetected());
+    }
+
+    @Test
+    public void testAtDomainSpaced() {
+        DetectionResult result = detector.detect("find me @ site . net", "");
+        assertTrue(result.isDetected());
     }
 
     @Test
@@ -180,6 +204,48 @@ public class UrlSpamDetectorTest {
     @Test
     public void testLeetspeakUrl() {
         DetectionResult result = detector.detect("v1s1t rsg0ld.c0m", "");
+        assertTrue(result.isDetected());
+    }
+
+    @Test
+    public void testNoUrlInNormalChat() {
+        DetectionResult result = detector.detect("I like to play this game", "");
+        assertFalse(result.isDetected());
+    }
+
+    @Test
+    public void testNoUrlWithDotInSentence() {
+        DetectionResult result = detector.detect("Yes. I agree with that.", "");
+        assertFalse(result.isDetected());
+    }
+
+    @Test
+    public void testNoUrlDiscordMention() {
+        DetectionResult result = detector.detect("I use discord but not for spam", "");
+        assertFalse(result.isDetected());
+    }
+
+    @Test
+    public void testSpecialCharsWithoutUrl() {
+        DetectionResult result = detector.detect("This is <cool> stuff!", "");
+        assertFalse(result.isDetected());
+    }
+
+    @Test
+    public void testAtSymbolWithoutDomain() {
+        DetectionResult result = detector.detect("meet @ ge", "");
+        assertFalse(result.isDetected());
+    }
+
+    @Test
+    public void testSpecialCharsBrackets() {
+        DetectionResult result = detector.detect("rsgold[]com for trades", "");
+        assertTrue(result.isDetected());
+    }
+
+    @Test
+    public void testSpecialCharsBraces() {
+        DetectionResult result = detector.detect("visit goldsite{}gg now", "");
         assertTrue(result.isDetected());
     }
 }

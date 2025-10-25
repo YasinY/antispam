@@ -197,4 +197,70 @@ public class RWTDetectorTest {
         assertTrue(result.isDetected());
         assertEquals("rwt: high-value-item", result.getKeyword());
     }
+
+    // Additional tests for missing branch coverage
+    @Test
+    public void testPayExtraWithoutBuyingPattern() {
+        DetectionResult result = detector.detect("paying extra for items", "");
+        assertFalse(result.isDetected());
+    }
+
+    @Test
+    public void testBuyingPatternWithoutPayExtra() {
+        DetectionResult result = detector.detect("buying items 100m", "");
+        assertFalse(result.isDetected());
+    }
+
+    @Test
+    public void testPayExtraAndBuyingPattern() {
+        DetectionResult result = detector.detect("paying extra buying items 100m", "");
+        assertTrue(result.isDetected());
+        assertEquals("rwt: pay-extra", result.getKeyword());
+    }
+
+    @Test
+    public void testAnyoneHaveWithoutHighValueItem() {
+        DetectionResult result = detector.detect("anyone have some items?", "");
+        assertFalse(result.isDetected());
+    }
+
+    @Test
+    public void testHighValueItemWithoutAnyoneHave() {
+        DetectionResult result = detector.detect("twisted bow is expensive", "");
+        assertFalse(result.isDetected());
+    }
+
+    @Test
+    public void testAnyoneHaveWithHighValueItem() {
+        DetectionResult result = detector.detect("anyone have twisted bow buying 1200m", "");
+        assertTrue(result.isDetected());
+        assertEquals("rwt: high-value-item", result.getKeyword());
+    }
+
+    @Test
+    public void testSomeoneHaveWithHighValueItem() {
+        DetectionResult result = detector.detect("someone have elysian? buying 800m", "");
+        assertTrue(result.isDetected());
+        assertEquals("rwt: high-value-item", result.getKeyword());
+    }
+
+    @Test
+    public void testHighValueItemWithoutPrice() {
+        DetectionResult result = detector.detect("buying twisted bow", "");
+        assertFalse(result.isDetected());
+    }
+
+    @Test
+    public void testPayAlotBuying() {
+        DetectionResult result = detector.detect("will pay alot buying tbow 1300m", "");
+        assertTrue(result.isDetected());
+        assertEquals("rwt: high-value-item", result.getKeyword());
+    }
+
+    @Test
+    public void testPayMuchBuying() {
+        DetectionResult result = detector.detect("paying much buying scythe 2500m", "");
+        assertTrue(result.isDetected());
+        assertEquals("rwt: high-value-item", result.getKeyword());
+    }
 }
