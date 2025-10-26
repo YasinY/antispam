@@ -3,11 +3,13 @@ name: Release
 on:
   push:
     tags:
-      - 'v*.*.*'  # Triggers on version tags like v1.0.0, v1.2.3, etc.
+      - 'v*'  # Triggers on version tags like v1.0.0, v1.2.3, etc.
 
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for creating releases
 
     steps:
     - name: Checkout code
