@@ -3,7 +3,7 @@
 <div align="center">
 
 ![Java](https://img.shields.io/badge/Java-11-orange?style=flat-square&logo=java)
-[![codecov](https://codecov.io/gh/YasinY/antispam/branch/main/graph/badge.svg)](https://codecov.io/gh/YasinY/antispam)
+[![codecov](https://codecov.io/gh/YasinY/antispam/graph/badge.svg?token=CETOE6I8X4)](https://codecov.io/gh/YasinY/antispam)
 ![License](https://img.shields.io/badge/license-BSD--2--Clause-blue?style=flat-square)
 ![RuneLite](https://img.shields.io/badge/RuneLite-compatible-blueviolet?style=flat-square)
 
