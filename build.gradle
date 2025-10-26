@@ -70,3 +70,37 @@ task coverage {
 	description = 'Runs tests and generates coverage report'
 	group = 'verification'
 }
+
+// JAR Configuration for Releases
+jar {
+	manifest {
+		attributes(
+			'Implementation-Title': 'Anti-Spam Plugin',
+			'Implementation-Version': project.version,
+			'Main-Class': 'com.antispam.AntiBeggarPlugin'
+		)
+	}
+
+	// Include all runtime dependencies in the JAR
+	from {
+		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+
+	// Exclude signatures to avoid conflicts
+	exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+
+	archiveBaseName = 'antispam-plugin'
+	archiveVersion = project.version
+}
+
+// Task to build release-ready JAR
+task releaseJar(type: Copy) {
+	dependsOn jar
+	from jar
+	into "${buildDir}/release"
+	rename { "${project.name}-${project.version}.jar" }
+
+	doLast {
+		println "Release JAR created at: ${buildDir}/release/${project.name}-${project.version}.jar"
+	}
+}

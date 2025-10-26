@@ -1,0 +1,107 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Triggers on version tags like v1.0.0, v1.2.3, etc.
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: 'gradle'
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Extract version from tag
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+    - name: Build release JAR
+      run: ./gradlew clean build jar
+
+    - name: Run tests
+      run: ./gradlew test
+
+    - name: Generate changelog
+      id: changelog
+      uses: metcalfc/changelog-generator@v4.1.0
+      with:
+        myToken: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Anti-Spam v${{ steps.get_version.outputs.VERSION }}
+        body: |
+          # Anti-Spam Plugin v${{ steps.get_version.outputs.VERSION }}
+
+          ## 📦 Installation
+
+          1. Download `antispam-plugin-${{ steps.get_version.outputs.VERSION }}.jar` below
+          2. Close RuneLite if it's running
+          3. Navigate to your RuneLite plugins folder:
+             - **Windows**: `%USERPROFILE%\.runelite\plugins`
+             - **macOS**: `~/.runelite/plugins`
+             - **Linux**: `~/.runelite/plugins`
+          4. Copy the JAR file into the plugins folder
+          5. Start RuneLite
+          6. The plugin should load automatically!
+
+          ## ✨ What's New
+
+          ${{ steps.changelog.outputs.changelog }}
+
+          ## 📊 Test Coverage
+
+          - **Tests**: 401 passing ✅
+          - **Instruction Coverage**: 86%
+          - **Branch Coverage**: 82%
+
+          ## 🔧 Features
+
+          - 12 specialized spam detectors
+          - Real-time filtering of public chat, overhead text, and private messages
+          - Customizable filter presets (Lenient, Moderate, Strict, Custom)
+          - Whitelist/Blacklist support
+          - Statistics panel with real-time updates
+
+          ## 💬 Contact & Support
+
+          - **Discord**: pengyon (ID: 235034590513725440)
+          - **OSRS**: AlwaysOnOSRS
+          - **Ko-fi**: https://ko-fi.com/alwaysonosrs
+
+          ## 📚 Documentation
+
+          Full documentation available in the [README](https://github.com/YasinY/antispam/blob/main/README.md)
+
+          ---
+
+          **Note**: This plugin requires RuneLite. It will not work with the official OSRS client.
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./build/libs/antispam-plugin-${{ steps.get_version.outputs.VERSION }}.jar
+        asset_name: antispam-plugin-${{ steps.get_version.outputs.VERSION }}.jar
+        asset_content_type: application/java-archive
