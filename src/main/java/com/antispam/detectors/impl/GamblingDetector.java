@@ -5,6 +5,7 @@ import com.antispam.detectors.ISpamDetector;
 
 import java.util.regex.Pattern;
 
+// TODO extract patterns to a separate file to reduce bloat
 public class GamblingDetector implements ISpamDetector {
 
     private static final Pattern ROLL_PATTERN = Pattern.compile(
