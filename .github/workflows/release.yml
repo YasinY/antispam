@@ -60,7 +60,7 @@ jobs:
 
           ## 📦 Installation
 
-          1. Download `antispam-plugin-${{ steps.get_version.outputs.VERSION }}.jar` below
+          1. Download the JAR file below (antispam-plugin-*.jar)
           2. Close RuneLite if it's running
           3. Navigate to your RuneLite plugins folder:
              - **Windows**: `%USERPROFILE%\.runelite\plugins`
@@ -86,6 +86,6 @@ jobs:
           ---
 
           **Note**: This plugin requires RuneLite. It will not work with the official OSRS client.
-        files: ./build/libs/antispam-plugin-${{ steps.get_version.outputs.VERSION }}.jar
+        files: ./build/libs/*.jar
         draft: false
         prerelease: false
