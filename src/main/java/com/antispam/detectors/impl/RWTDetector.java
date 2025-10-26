@@ -27,16 +27,18 @@ public class RWTDetector implements ISpamDetector {
         "armadyl chestplate", "armadyl chainskirt", "armadyl set",
         "bandos set", "bandos chestplate", "bandos tassets",
         "saradomin godsword", "sgs",
-        "spectral spirit shield", "spectral"
+        "spectral spirit shield", "spectral",
+        "fang", "fang of venenatis",
+        "shadow", "tumeken's shadow", "tumekens shadow"
     );
 
     private static final Pattern BUYING_PATTERN = Pattern.compile(
-        "\\b(buy(ing)?|sell(ing)?|trade(ing)?|trading up)\\b.{0,80}\\b(\\d{2,5})\\s*([kmb]|mil+|bil+)\\b",
+        "\\b(buy(ing)?|sell(ing)?|trade(ing)?|trading up)\\b.{0,80}\\b(\\d{1,5}(\\.\\d{1,2})?)\\s*([kmb]|mil+|bil+)\\b",
         Pattern.CASE_INSENSITIVE
     );
 
     private static final Pattern ABSURD_AMOUNT = Pattern.compile(
-        "\\b(spending|have|got|selling|buying)\\b.{0,30}\\b([2-9]\\d{1,2}|\\d{4,})\\s*([b]|bil+)\\b",
+        "\\b(spending|have|got|selling|buying)\\b.{0,30}\\b(([2-9]\\d{1,2}|\\d{4,})(\\.\\d{1,2})?)\\s*([b]|bil+)\\b",
         Pattern.CASE_INSENSITIVE
     );
 
@@ -62,6 +64,11 @@ public class RWTDetector implements ISpamDetector {
 
     private static final Pattern HELLO_BUYING = Pattern.compile(
         "\\bhello+\\??.{0,30}\\b(buy(ing)?|sell(ing)?)\\b",
+        Pattern.CASE_INSENSITIVE
+    );
+
+    private static final Pattern ANYONE_SELL_ME = Pattern.compile(
+        "\\b(anyone|someone|anybody)\\b.{0,30}\\b(sell|buy)\\b.{0,30}\\bme\\b",
         Pattern.CASE_INSENSITIVE
     );
 
@@ -97,6 +104,10 @@ public class RWTDetector implements ISpamDetector {
 
         if (HELLO_BUYING.matcher(originalText).find()) {
             return DetectionResult.detected("rwt: hello-buying");
+        }
+
+        if (ANYONE_SELL_ME.matcher(originalText).find()) {
+            return DetectionResult.detected("rwt: anyone-sell-me");
         }
 
         return DetectionResult.notDetected();

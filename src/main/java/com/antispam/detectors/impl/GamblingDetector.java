@@ -13,6 +13,11 @@ public class GamblingDetector implements ISpamDetector {
         Pattern.CASE_INSENSITIVE
     );
 
+    private static final Pattern SIMPLE_ROLL = Pattern.compile(
+        "\\broll\\b.{0,5}\\b\\d{1,3}\\b",
+        Pattern.CASE_INSENSITIVE
+    );
+
     private static final Pattern BET_PATTERN = Pattern.compile(
         "\\b(my )?(minimum|maximum|min|max)\\b.{0,30}\\b(bet|is)\\b",
         Pattern.CASE_INSENSITIVE
@@ -60,6 +65,21 @@ public class GamblingDetector implements ISpamDetector {
 
     private static final Pattern GIVE_YOU_DOUBLE = Pattern.compile(
         "\\b(give|get)\\b.{0,30}\\byou\\b.{0,30}\\b\\d{3,5}\\s*[kmb]\\b",
+        Pattern.CASE_INSENSITIVE
+    );
+
+    private static final Pattern ADDED_TO_POT = Pattern.compile(
+        "\\b(add(ed)?|put|deposit(ed)?)\\b.{0,30}\\b(to )?(the )?pot\\b",
+        Pattern.CASE_INSENSITIVE
+    );
+
+    private static final Pattern VICTORY_PATTERN = Pattern.compile(
+        "\\b(victory|defeat|loss)\\b.{0,30}\\b(total|feet|pot)\\b",
+        Pattern.CASE_INSENSITIVE
+    );
+
+    private static final Pattern H_CURRENCY = Pattern.compile(
+        "\\b\\d{1,5}\\s*H\\b",
         Pattern.CASE_INSENSITIVE
     );
 
@@ -111,6 +131,22 @@ public class GamblingDetector implements ISpamDetector {
 
         if (GIVE_YOU_DOUBLE.matcher(originalText).find()) {
             return DetectionResult.detected("gambling: give-you-double");
+        }
+
+        if (SIMPLE_ROLL.matcher(originalText).find()) {
+            return DetectionResult.detected("gambling: simple-roll");
+        }
+
+        if (ADDED_TO_POT.matcher(originalText).find()) {
+            return DetectionResult.detected("gambling: pot");
+        }
+
+        if (VICTORY_PATTERN.matcher(originalText).find()) {
+            return DetectionResult.detected("gambling: victory");
+        }
+
+        if (H_CURRENCY.matcher(originalText).find() && (originalText.toLowerCase().contains("pot") || originalText.toLowerCase().contains("roll"))) {
+            return DetectionResult.detected("gambling: h-currency");
         }
 
         return DetectionResult.notDetected();
