@@ -23,7 +23,7 @@ public class BeggarPatternMatcher {
     private List<String> customKeywords;
     private List<Pattern> customRegexPatterns;
     private DetectorChain detectorChain;
-    private AntiBeggarConfig config;
+    private final AntiBeggarConfig config;
 
     public BeggarPatternMatcher(AntiBeggarConfig config) {
         this.config = config;
