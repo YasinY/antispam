@@ -45,10 +45,10 @@ jacocoTestReport {
 
 	reports {
 		xml.enabled true
+		xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
 		html.enabled true
-		csv.enabled false
-
 		html.destination file("${buildDir}/reports/jacoco/html")
+		csv.enabled false
 	}
 
 	afterEvaluate {

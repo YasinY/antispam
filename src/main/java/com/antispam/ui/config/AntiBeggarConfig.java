@@ -1,9 +1,6 @@
 package com.antispam.ui.config;
 
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
-import net.runelite.client.config.ConfigSection;
+import net.runelite.client.config.*;
 
 @ConfigGroup("antibeggar")
 public interface AntiBeggarConfig extends Config {
@@ -43,6 +40,14 @@ public interface AntiBeggarConfig extends Config {
         position = 4
     )
     String advancedSection = "advancedSection";
+
+    @ConfigSection(
+        name = "Support",
+        description = "Support the developer",
+        position = 5,
+        closedByDefault = true
+    )
+    String supportSection = "supportSection";
 
     @ConfigItem(
         keyName = "filterPreset",
@@ -305,6 +310,17 @@ public interface AntiBeggarConfig extends Config {
         section = advancedSection
     )
     default boolean showNotifications() {
+        return false;
+    }
+
+    @ConfigItem(
+        keyName = "kofiButton",
+        name = "Open Ko-fi Link",
+        description = "Click to open my Ko-fi page and support the plugin!",
+        position = 0,
+        section = supportSection
+    )
+    default boolean kofiButton() {
         return false;
     }
 }

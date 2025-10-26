@@ -25,6 +25,7 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.util.ImageUtil;
+import net.runelite.client.util.LinkBrowser;
 
 import javax.inject.Inject;
 import javax.swing.*;
@@ -118,6 +119,9 @@ public class AntiBeggarPlugin extends Plugin {
         }
 
         switch (event.getKey()) {
+            case "kofiButton":
+                LinkBrowser.browse("https://ko-fi.com/alwaysonosrs");
+                break;
             case "filterPreset":
                 matcher.updatePreset(config.filterPreset());
                 break;

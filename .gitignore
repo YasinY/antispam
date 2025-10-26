@@ -1,5 +1,11 @@
+# Gradle
 .gradle
 build
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# IDE
 .idea/
 out/
 src/.idea/
@@ -7,3 +13,25 @@ bin/
 .settings/
 .classpath
 .project
+*.iml
+*.iws
+*.ipr
+
+# MacOS
+.DS_Store
+
+# Test reports
+*.log
+.jacoco
+coverage/
+build/reports/
+build/test-results/
+
+# Keep jacoco XML for CI
+!build/reports/jacoco/test/jacocoTestReport.xml
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
