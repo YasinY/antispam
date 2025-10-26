@@ -32,7 +32,7 @@ jobs:
       run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
     - name: Build release JAR
-      run: ./gradlew clean build jar
+      run: ./gradlew clean build jar -PreleaseVersion=${{ steps.get_version.outputs.VERSION }}
 
     - name: Run tests
       run: ./gradlew test
@@ -60,7 +60,7 @@ jobs:
 
           ## 📦 Installation
 
-          1. Download the JAR file below (antispam-plugin-*.jar)
+          1. Download `antispam-plugin-${{ steps.get_version.outputs.VERSION }}.jar` below
           2. Close RuneLite if it's running
           3. Navigate to your RuneLite plugins folder:
              - **Windows**: `%USERPROFILE%\.runelite\plugins`

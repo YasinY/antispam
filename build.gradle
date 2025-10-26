@@ -28,7 +28,7 @@ dependencies {
 }
 
 group = 'com.antibeggar'
-version = '1.0.0'
+version = project.findProperty('releaseVersion') ?: '1.0.0'
 sourceCompatibility = '1.8'
 
 tasks.withType(JavaCompile) {
