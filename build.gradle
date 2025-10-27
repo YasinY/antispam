@@ -44,11 +44,11 @@ jacocoTestReport {
 	dependsOn test
 
 	reports {
-		xml.enabled true
-		xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
-		html.enabled true
-		html.destination file("${buildDir}/reports/jacoco/html")
-		csv.enabled false
+		xml.required = true
+		xml.outputLocation = file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+		html.required = true
+		html.outputLocation = file("${buildDir}/reports/jacoco/html")
+		csv.required = false
 	}
 
 	afterEvaluate {
