@@ -8,14 +8,7 @@ import java.util.regex.Pattern;
 /**
  * Detects URL spam in chat messages using various obfuscation patterns.
  *
- * Note on code coverage (84% branch coverage):
- * - Some branches are unreachable due to pattern check ordering:
- *   * DISCORD_LINK patterns (lines 87, 108) are caught by SPACED_DOMAIN first
- *   * AT_DOMAIN patterns (lines 90, 111) are caught by SPACED_DOMAIN first
- *   * Null checks in getDetectedUrlPattern() (lines 97-98, 114) are defensive code
- *     since the method is only called when containsUrl() returns true
- * - Pattern ordering is intentional for performance (check common patterns first)
- * - Changing the order would require extensive regression testing
+ * Pattern ordering is intentional for performance (check common patterns first).
  */
 public class UrlSpamDetector implements ISpamDetector {
 
@@ -47,11 +40,6 @@ public class UrlSpamDetector implements ISpamDetector {
         Pattern.CASE_INSENSITIVE
     );
 
-    private static final Pattern DISCORD_LINK = Pattern.compile(
-        "(?i)(discord\\s*\\.\\s*gg|disc[o0]rd\\s*d[o0]t\\s*gg)",
-        Pattern.CASE_INSENSITIVE
-    );
-
     private static final Pattern SUBSTITUTION_DOMAIN = Pattern.compile(
         "(?i)[a-z0-9-]+\\s*[.,]\\s*[cC][o0O][mM]|" +
         "[a-z0-9-]+\\s*[.,]\\s*[nN][eE][tT]|" +
@@ -62,11 +50,6 @@ public class UrlSpamDetector implements ISpamDetector {
 
     private static final Pattern SLASH_SEPARATOR = Pattern.compile(
         "(?i)[a-z0-9-]+\\s*/\\s*(com|net|org|gg|io)",
-        Pattern.CASE_INSENSITIVE
-    );
-
-    private static final Pattern AT_DOMAIN = Pattern.compile(
-        "(?i)@\\s*[a-z0-9-]+\\s*\\.\\s*(com|net|org|gg)",
         Pattern.CASE_INSENSITIVE
     );
 
@@ -96,20 +79,14 @@ public class UrlSpamDetector implements ISpamDetector {
         if (DOTTED_DOMAIN.matcher(text).find()) return true;
         if (WORD_DOT.matcher(text).find()) return true;
         if (PARENTHESIS_DOT.matcher(text).find()) return true;
-        if (DISCORD_LINK.matcher(text).find()) return true;
         if (SUBSTITUTION_DOMAIN.matcher(normalized).find()) return true;
         if (SLASH_SEPARATOR.matcher(text).find()) return true;
-        if (AT_DOMAIN.matcher(text).find()) return true;
         if (SPECIAL_CHARS.matcher(text).find()) return true;
 
         return false;
     }
 
     private String getDetectedUrlPattern(String text) {
-        if (text == null || text.isEmpty()) {
-            return null;
-        }
-
         String normalized = normalizeText(text);
 
         if (STANDARD_URL.matcher(text).find()) return "url";
@@ -117,10 +94,8 @@ public class UrlSpamDetector implements ISpamDetector {
         if (DOTTED_DOMAIN.matcher(text).find()) return "dotted-url";
         if (WORD_DOT.matcher(text).find()) return "word-dot";
         if (PARENTHESIS_DOT.matcher(text).find()) return "parenthesis-dot";
-        if (DISCORD_LINK.matcher(text).find()) return "discord";
         if (SUBSTITUTION_DOMAIN.matcher(normalized).find()) return "substitution-url";
         if (SLASH_SEPARATOR.matcher(text).find()) return "slash-url";
-        if (AT_DOMAIN.matcher(text).find()) return "at-url";
         if (SPECIAL_CHARS.matcher(text).find()) return "special-chars-url";
 
         return null;
