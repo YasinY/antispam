@@ -60,33 +60,18 @@ public class UrlSpamDetector implements ISpamDetector {
 
     @Override
     public DetectionResult detect(String originalText, String normalizedText) {
-        if (containsUrl(originalText)) {
-            String pattern = getDetectedUrlPattern(originalText);
-            return DetectionResult.detected(pattern != null ? pattern : "url");
+        String pattern = getDetectedUrlPattern(originalText);
+        if (pattern != null) {
+            return DetectionResult.detected(pattern);
         }
         return DetectionResult.notDetected();
     }
 
-    private boolean containsUrl(String text) {
+    private String getDetectedUrlPattern(String text) {
         if (text == null || text.isEmpty()) {
-            return false;
+            return null;
         }
 
-        String normalized = normalizeText(text);
-
-        if (STANDARD_URL.matcher(text).find()) return true;
-        if (SPACED_DOMAIN.matcher(text).find()) return true;
-        if (DOTTED_DOMAIN.matcher(text).find()) return true;
-        if (WORD_DOT.matcher(text).find()) return true;
-        if (PARENTHESIS_DOT.matcher(text).find()) return true;
-        if (SUBSTITUTION_DOMAIN.matcher(normalized).find()) return true;
-        if (SLASH_SEPARATOR.matcher(text).find()) return true;
-        if (SPECIAL_CHARS.matcher(text).find()) return true;
-
-        return false;
-    }
-
-    private String getDetectedUrlPattern(String text) {
         String normalized = normalizeText(text);
 
         if (STANDARD_URL.matcher(text).find()) return "url";
