@@ -261,4 +261,28 @@ public class KeywordComboDetectorTest {
         DetectionResult result = detector.detect("FREE GOLD FOR ALL", "");
         assertTrue(result.isDetected());
     }
+
+    @Test
+    public void testNormalizedTextDetection() {
+        // originalText has leetspeak that won't match, but normalizedText will
+        DetectionResult result = detector.detect("fr33 g0ld for everyone", "free gold for everyone");
+        assertTrue(result.isDetected());
+        assertTrue(result.getKeyword().contains("normalized"));
+    }
+
+    @Test
+    public void testNormalizedSellingWebsite() {
+        // Test normalized text matching for selling + .com combo
+        DetectionResult result = detector.detect("s3lling at rsg0ld.c0m", "selling at rsgold.com");
+        assertTrue(result.isDetected());
+        assertTrue(result.getKeyword().contains("normalized"));
+    }
+
+    @Test
+    public void testNormalizedNeedGp() {
+        // Test normalized text matching for need + gp combo
+        DetectionResult result = detector.detect("n33d gp pl0x", "need gp plox");
+        assertTrue(result.isDetected());
+        assertTrue(result.getKeyword().contains("normalized"));
+    }
 }
