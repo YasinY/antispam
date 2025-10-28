@@ -111,18 +111,10 @@ public class KeywordSpamDetector implements ISpamDetector {
     }
 
     private boolean hasNegationBefore(String text, String keyword) {
-        if (text == null || keyword == null) {
-            return false;
-        }
-
         String lowerText = text.toLowerCase();
         String lowerKeyword = keyword.toLowerCase();
 
         int keywordIndex = lowerText.indexOf(lowerKeyword);
-        if (keywordIndex == -1) {
-            return false;
-        }
-
         String beforeKeyword = lowerText.substring(0, keywordIndex).trim();
 
         if (beforeKeyword.isEmpty()) {
