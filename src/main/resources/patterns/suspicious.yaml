@@ -1,0 +1,15 @@
+detector: SuspiciousPatternDetector
+description: Detects suspicious patterns like excessive spacing or special characters
+
+patterns:
+  - name: EXCESSIVE_SPACING
+    regex: ".*[a-z]\\s+[a-z]\\s+[a-z]\\s+[a-z].*"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "suspicious-pattern"
+    description: "Detects excessive letter spacing"
+
+  - name: EXCESSIVE_SPECIAL_CHARS
+    regex: ".*[^a-zA-Z0-9\\s]{6,}.*"
+    detection: "suspicious-pattern"
+    description: "Detects 6+ consecutive special characters"

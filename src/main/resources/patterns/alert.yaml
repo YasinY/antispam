@@ -1,0 +1,94 @@
+detector: AlertSpamDetector
+description: Detects fake anti-scam alert spam messages
+
+patterns:
+  - name: ALERT_TAG
+    regex: "\\[(alert|warning|beware|caution)\\]"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "alert-spam: tag"
+    description: "Detects [ALERT] style tags"
+
+  - name: SCAMMER_ALERT
+    regex: "\\b(is a|are|beware of)\\b.{0,30}\\b(scamm?er|lur(er|ing)|fake)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "alert-spam: scammer"
+    description: "Detects 'X is a scammer' messages"
+
+  - name: IGNORE_ALERT
+    regex: "\\b(add|put).{0,20}(to )?ignore\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "alert-spam: ignore"
+    description: "Detects 'add to ignore' spam"
+
+  - name: FAKE_ANTISCAM
+    regex: "\\bfake\\b.{0,30}\\b(anti[ -]?scam|anti[ -]?lur)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "alert-spam: fake-antiscam"
+    description: "Detects 'fake anti-scam' warnings"
+
+  - name: SCEPTRE_LURE
+    regex: "\\bsceptre\\b.{0,50}\\blur"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "alert-spam: sceptre-lure"
+    description: "Detects sceptre lure warnings"
+
+  - name: LOCATION_WARNING
+    regex: "\\b(barb\\.?\\s*outpost|shanty\\.?\\s*pass|rogues?\\.?\\s*den)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "alert-spam: location-warning"
+    description: "Detects location-based warnings"
+
+  - name: UNSAFE_BANKS
+    regex: "\\bunsafe\\b.{0,30}\\bbanks?\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "alert-spam: unsafe-banks"
+    description: "Detects unsafe bank warnings"
+
+  - name: NOT_SAFE_PVP
+    regex: "\\bnot safe\\b.{0,30}\\b(on )?pvp\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "alert-spam: not-safe-pvp"
+    description: "Detects PVP safety warnings"
+
+  - name: LURERS_TO_IGNORE
+    regex: "\\blur(ers?|ing)\\b.{0,30}\\bto ignore\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "alert-spam: lurers-list"
+    description: "Detects lurer ignore list spam"
+
+  - name: DO_NOT_ATTEMPT
+    regex: "\\bdo not attempt\\b.{0,50}\\b(anti[ -]?scam|lur)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "alert-spam: do-not-attempt"
+    description: "Detects 'do not attempt anti-scam' warnings"
+
+  - name: NEVER_GET_SCEPTRE
+    regex: "\\bnever (get|give)\\b.{0,30}\\bsceptre\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "alert-spam: never-get-sceptre"
+    description: "Detects sceptre-related warnings"
+
+  - name: GLITCHES_TO_SCAM
+    regex: "\\b(use|using) glitches\\b.{0,30}\\b(to )?(scam|push|lur)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "alert-spam: glitches-scam"
+    description: "Detects glitch scam warnings"
+
+  - name: BRING_YOU_TO
+    regex: "\\bbring you to\\b.{0,30}\\bunsafe\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "alert-spam: bring-unsafe"
+    description: "Detects unsafe location warnings"

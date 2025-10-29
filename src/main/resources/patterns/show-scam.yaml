@@ -1,0 +1,66 @@
+detector: ShowTradingScamDetector
+description: Detects "show items" trading scams
+
+patterns:
+  - name: BANK_VALUE_PERCENT
+    regex: "\\bbank\\b.{0,30}\\bvalue\\b.{0,50}\\b\\d+\\s*%"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "show-scam: bank-value-percent"
+    description: "Detects bank value percentage scams"
+
+  - name: SHOW_BANK_WITH_AMOUNT
+    regex: "\\bshow\\b.{0,30}\\b(me)?\\b.{0,30}\\b\\d+\\s*[kmb]\\b.{0,30}\\bbank\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "show-scam: show-bank-amount"
+    description: "Detects 'show me X amount bank' scams"
+
+  - name: DOUBLING_WHAT_YOU_SHOW
+    regex: "\\bdoubl(ing|e)\\b.{0,50}\\bwhat you show\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "show-scam: doubling-shown"
+    description: "Detects 'doubling what you show' scams"
+
+  - name: TRADE_AND_SHOW
+    regex: "\\btrade\\b.{0,30}\\b(me)?\\b.{0,30}\\band\\b.{0,30}\\bshow\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "show-scam: trade-and-show"
+    description: "Detects 'trade me and show' scams"
+
+  - name: SHOW_ITEM_GET_ITEM
+    regex: "\\bshow\\b.{0,50}\\b(and|you will|you'll|u will)\\b.{0,30}\\b(get|receive)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "show-scam: show-item-get-item"
+    description: "Detects 'show and get' scams"
+
+  - name: SHOW_MULTIPLIER
+    regex: "\\bshow\\b.{0,50}\\b(2x|double|doubl(ing|e)|\\d+x)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "show-scam: show-multiplier"
+    description: "Detects 'show for multiplier' scams"
+
+  - name: SHOW_BEST_ITEMS
+    regex: "\\bshow\\b.{0,30}\\b(me)?\\b.{0,30}\\b(all|your)?\\b.{0,30}\\b(best|good|valuable)\\b.{0,30}\\bitems\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "show-scam: show-best-items"
+    description: "Detects 'show best items' scams"
+
+  - name: HERO_AFTER
+    regex: "\\byou\\b.{0,30}\\b(are|will be|become)\\b.{0,30}\\bhero\\b.{0,30}\\bafter\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "show-scam: hero-promise"
+    description: "Detects 'hero after' promise scams"
+
+  - name: SHOW_BANK
+    regex: "\\bshow\\b.{0,30}\\b(me|your)?\\b.{0,30}\\bbank\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "show-scam: show-bank"
+    description: "Detects generic 'show bank' requests"

@@ -1,0 +1,38 @@
+detector: SpacedTextDetector
+description: Detects spaced out text used to evade filters (e.g., w-e-b-s-i-t-e)
+
+patterns:
+  - name: EM_DASH_SPACED
+    regex: "[a-z]—[a-z]—[a-z]"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "spaced-text: em-dash"
+    description: "Detects em-dash spaced text (a—b—c)"
+
+  - name: HYPHEN_SPACED
+    regex: "[a-z][ -][a-z][ -][a-z][ -][a-z]"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "spaced-text: hyphen"
+    description: "Detects hyphen spaced text (a-b-c-d)"
+
+  - name: UNDERSCORE_SPACED
+    regex: "[a-z]_[a-z]_[a-z]_[a-z]"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "spaced-text: underscore"
+    description: "Detects underscore spaced text (a_b_c_d)"
+
+  - name: DOT_SPACED
+    regex: "[a-z]\\.[a-z]\\.[a-z]\\.[a-z]"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "spaced-text: dot"
+    description: "Detects dot spaced text (a.b.c.d)"
+
+  - name: COMMA_SPACED
+    regex: "[a-z],[a-z],[a-z],[a-z]"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "spaced-text: comma"
+    description: "Detects comma spaced text (a,b,c,d)"

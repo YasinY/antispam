@@ -1,0 +1,59 @@
+detector: UrlSpamDetector
+description: Detects URL spam using various obfuscation patterns
+
+patterns:
+  - name: STANDARD_URL
+    regex: "(?i)(https?://[^\\s]+|www\\.[^\\s]+)"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "url"
+    description: "Standard HTTP/HTTPS URLs and www domains"
+
+  - name: SPACED_DOMAIN
+    regex: "(?i)[a-z0-9-]+\\s*\\.\\s*(com|net|org|gg|io|co|me|tv)"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "spaced-url"
+    description: "Domains with spaces around dots"
+
+  - name: DOTTED_DOMAIN
+    regex: "(?i)[a-z0-9-]+\\s*\\.\\s*[cC]\\s*\\.\\s*[oO0]\\s*\\.\\s*[mM]|[a-z0-9-]+\\s*\\.\\s*[nN]\\s*\\.\\s*[eE]\\s*\\.\\s*[tT]|[a-z0-9-]+\\s*\\.\\s*[gG]\\s*\\.\\s*[gG]|[a-z0-9-]+\\s*\\.\\s*[iI1]\\s*\\.\\s*[oO0]"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "dotted-url"
+    description: "Domains with spaces between each letter of TLD"
+
+  - name: WORD_DOT
+    regex: "(?i)(d[o0]t|dot)\\s*(com|net|org|gg|co)"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "word-dot"
+    description: "Word 'dot' used instead of period"
+
+  - name: PARENTHESIS_DOT
+    regex: "(?i)\\(\\s*(dot|d[o0]t)\\s*\\)\\s*(com|net|org|gg)"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "parenthesis-dot"
+    description: "Word 'dot' in parentheses"
+
+  - name: SUBSTITUTION_DOMAIN
+    regex: "(?i)[a-z0-9-]+\\s*[.,]\\s*[cC][o0O][mM]|[a-z0-9-]+\\s*[.,]\\s*[nN][eE][tT]|[a-z0-9-]+\\s*[.,]\\s*[gG][gG]|[a-z0-9-]+\\s*[.,]\\s*[iI1][o0O]"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "substitution-url"
+    description: "Character substitution in TLD (uses normalized text)"
+
+  - name: SLASH_SEPARATOR
+    regex: "(?i)[a-z0-9-]+\\s*/\\s*(com|net|org|gg|io)"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "slash-url"
+    description: "Slash instead of dot"
+
+  - name: SPECIAL_CHARS
+    regex: "(?i)[a-z0-9-]+\\s*[\\[\\]{}()<>_-]+\\s*(com|net|org|gg)"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "special-chars-url"
+    description: "Special characters between domain and TLD"

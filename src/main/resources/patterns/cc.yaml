@@ -1,0 +1,45 @@
+detector: CCSpamDetector
+description: Detects clan chat (CC) spam and advertisements
+
+patterns:
+  - name: JOIN_CC
+    regex: "\\bjoin\\b.{0,50}\\b(cc|chat|clan)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "cc-spam: join"
+    description: "Detects 'join cc' messages"
+
+  - name: SWAP_CC
+    regex: "\\b(swap|swapping|trade)\\b.{0,50}\\b(rs3|osrs|07|dmm|07|d[ -]?m[ -]?m)\\b.{0,50}\\b(gp|gold|cc|chat)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "cc-spam: swap"
+    description: "Detects swap CC advertisements"
+
+  - name: CC_BRACES
+    regex: "(<gt>|>|\\[|\\(|\\{|''|\").{0,30}(cc|chat|clan).{0,30}(<lt>|<|]|\\)|\\}|''|\")"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "cc-spam: braces"
+    description: "Detects CC names in braces/quotes"
+
+  - name: MOST_TRUSTED
+    regex: "\\b(most|best|trusted)\\b.{0,50}\\b(swap|cc|clan|chat)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "cc-spam: trusted"
+    description: "Detects 'most trusted cc' claims"
+
+  - name: DROP_PARTY_CC
+    regex: "\\b(drop[ -]?party|giveaway)\\b.{0,50}\\b(cc|chat|tonight|at)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "cc-spam: drop-party"
+    description: "Detects drop party CC advertisements"
+
+  - name: SPECIFIC_CC_NAMES
+    regex: "\\b(workless|wk swap|rc swap|caw cc|prayer community)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "cc-spam: specific-cc"
+    description: "Detects specific known spam CC names"
