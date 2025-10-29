@@ -1,0 +1,101 @@
+detector: RWTDetector
+description: Detects Real World Trading (RWT) and high-value item trading spam
+
+# High value items that indicate potential RWT
+highValueItems:
+  - twisted bow
+  - t bow
+  - tbow
+  - elysian
+  - ely
+  - elysian spirit shield
+  - scythe
+  - scythe of vitur
+  - inquisitor
+  - dhcb
+  - dragon hunter crossbow
+  - rapier
+  - ghrazi rapier
+  - ghrazier rapier
+  - dragon claws
+  - d claws
+  - claws
+  - ancestral
+  - ancestral set
+  - harmonised orb
+  - volatile orb
+  - sanguinesti staff
+  - sang staff
+  - kodai wand
+  - dragon hunter lance
+  - dhl
+  - dwh
+  - dragon warhammer
+  - 3rd age
+  - third age
+  - erd age
+  - armadyl chestplate
+  - armadyl chainskirt
+  - armadyl set
+  - bandos set
+  - bandos chestplate
+  - bandos tassets
+  - saradomin godsword
+  - sgs
+  - spectral spirit shield
+  - spectral
+  - fang
+  - fang of venenatis
+  - shadow
+  - tumeken's shadow
+  - tumekens shadow
+
+patterns:
+  - name: BUYING_PATTERN
+    regex: "\\b(buy(ing)?|sell(ing)?|trade(ing)?|trading up)\\b.{0,80}\\b(\\d{1,5}(\\.\\d{1,2})?)\\s*([kmb]|mil+|bil+)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    description: "Helper pattern: matches buying/selling with large amounts (used by other patterns)"
+
+  - name: ABSURD_AMOUNT
+    regex: "\\b(spending|have|got|selling|buying)\\b.{0,30}\\b(([2-9]\\d{1,2}|\\d{4,})(\\.\\d{1,2})?)\\s*([b]|bil+)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "rwt: absurd-amount"
+    description: "Detects absurdly large amounts (200b+)"
+
+  - name: BANK_SALE
+    regex: "\\b(sell(ing)?|buy(ing)?)\\b.{0,30}\\b(your )?bank\\b.{0,50}\\b(\\d{1,3})\\s*%"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "rwt: bank-sale"
+    description: "Detects bank percentage sales"
+
+  - name: QUICK_SALE
+    regex: "\\b(someone|anyone)\\b.{0,50}\\b(sell|buy)\\b.{0,50}\\b(quick(ly)?|now|asap)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "rwt: urgent-trade"
+    description: "Detects urgent sale requests"
+
+  - name: PAY_EXTRA
+    regex: "\\b(pay(ing)?|will pay|i pay)\\b.{0,30}\\b(a ?lot|much|alot|extra)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "rwt: pay-extra"
+    description: "Detects willingness to pay extra (requires BUYING_PATTERN)"
+    requiresPattern: BUYING_PATTERN
+
+  - name: HELLO_BUYING
+    regex: "\\bhello+\\??.{0,30}\\b(buy(ing)?|sell(ing)?)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "rwt: hello-buying"
+    description: "Detects 'hello buying' spam pattern"
+
+  - name: ANYONE_SELL_ME
+    regex: "\\b(anyone|someone|anybody)\\b.{0,30}\\b(sell|buy)\\b.{0,30}\\bme\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "rwt: anyone-sell-me"
+    description: "Detects 'anyone sell me' patterns"

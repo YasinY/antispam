@@ -1,0 +1,111 @@
+detector: GamblingDetector
+description: Detects gambling and dice-related spam in OSRS chat
+
+patterns:
+  - name: ROLL_PATTERN
+    regex: "\\b(has )?(won|lost|rolled)\\b.{0,50}\\b(roll|dice)\\b.{0,30}\\b\\d{1,3}\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: roll"
+    description: "Detects dice rolling messages (e.g., 'has won roll dice 55')"
+
+  - name: BET_PATTERN
+    regex: "\\b(my )?(minimum|maximum|min|max)\\b.{0,30}\\b(bet|is)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: bet"
+    description: "Detects betting minimums/maximums (e.g., 'minimum bet 10m')"
+
+  - name: QUEUE_PATTERN
+    regex: "\\b(the )?queue\\b.{0,50}\\b(has|people|players|waiting)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: queue"
+    description: "Detects queue-related gambling messages"
+
+  - name: PAYOUT_PATTERN
+    regex: "\\b(huge|massive|big)\\b.{0,20}\\b(payout|win)s?\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: payout"
+    description: "Detects payout advertisements"
+
+  - name: RECEIVED_WINNINGS
+    regex: "\\b(has )?(received|cashed|been paid)\\b.{0,30}(winning|their)?.{0,30}\\b\\d{1,4}\\s*[kmb]"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: winnings"
+    description: "Detects messages about receiving winnings"
+
+  - name: TRADE_ACCEPTED
+    regex: "\\btrade accepted\\b.{0,30}\\b(for|by|from)\\b.{0,30}\\b\\d{1,4}\\s*[kmb]"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: trade-accepted"
+    description: "Detects trade accepted messages with amounts"
+
+  - name: DICE_HOST
+    regex: "\\b(original|trusted|legit)\\b.{0,20}\\b(dice|host|casino)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: dice-host"
+    description: "Detects dice host advertisements"
+
+  - name: DOUBLING_MONEY
+    regex: "\\bdoubl(ing|e)\\b.{0,30}\\b(money|gold|gp|coins|all|amounts)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: doubling"
+    description: "Detects money doubling scams"
+
+  - name: MULTIPLY_PATTERN
+    regex: "\\b(2x|\\d+x)\\b.{0,30}\\b(them|it|your|all)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: multiply"
+    description: "Detects multiplier scams (e.g., '2x your money')"
+
+  - name: GIVE_YOU_DOUBLE
+    regex: "\\b(give|get)\\b.{0,30}\\byou\\b.{0,30}\\b\\d{3,5}\\s*[kmb]\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: give-you-double"
+    description: "Detects give-you-double scams"
+
+  - name: ROLL_COMMAND
+    regex: "\\broll\\b.{0,10}\\b5[0-9]\\+"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: roll-command"
+    description: "Detects roll commands like 'roll 55+'"
+
+  - name: SIMPLE_ROLL
+    regex: "\\broll\\b.{0,5}\\b\\d{1,3}\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: simple-roll"
+    description: "Detects simple roll commands (e.g., 'roll 55')"
+
+  - name: ADDED_TO_POT
+    regex: "\\b(add(ed)?|put|deposit(ed)?)\\b.{0,30}\\b(to )?(the )?pot\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: pot"
+    description: "Detects pot-related messages"
+
+  - name: VICTORY_PATTERN
+    regex: "\\b(victory|defeat|loss)\\b.{0,30}\\b(total|feet|pot)\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: victory"
+    description: "Detects victory/defeat messages"
+
+  - name: H_CURRENCY
+    regex: "\\b\\d{1,5}\\s*H\\b"
+    flags:
+      - CASE_INSENSITIVE
+    detection: "gambling: h-currency"
+    description: "Detects H currency (hot potato gambling currency)"
+    requiresKeywords:
+      - pot
+      - roll
