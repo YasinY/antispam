@@ -3,6 +3,7 @@ package com.antispam.detectors.impl;
 import com.antispam.detectors.DetectionResult;
 import com.antispam.detectors.ISpamDetector;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -57,11 +58,6 @@ public class RWTDetector implements ISpamDetector {
         Pattern.CASE_INSENSITIVE
     );
 
-    private static final Pattern ANYONE_HAVE = Pattern.compile(
-        "\\b(anyone|someone|no one|noone)\\b.{0,50}\\b(here )?have\\b",
-        Pattern.CASE_INSENSITIVE
-    );
-
     private static final Pattern HELLO_BUYING = Pattern.compile(
         "\\bhello+\\??.{0,30}\\b(buy(ing)?|sell(ing)?)\\b",
         Pattern.CASE_INSENSITIVE
@@ -73,11 +69,7 @@ public class RWTDetector implements ISpamDetector {
     );
 
     @Override
-    public DetectionResult detect(String originalText, String normalizedText) {
-        if (originalText == null || originalText.isEmpty()) {
-            return DetectionResult.notDetected();
-        }
-
+    public DetectionResult detect(@Nonnull String originalText, String normalizedText) {
         if (ABSURD_AMOUNT.matcher(originalText).find()) {
             return DetectionResult.detected("rwt: absurd-amount");
         }
@@ -98,10 +90,6 @@ public class RWTDetector implements ISpamDetector {
             return DetectionResult.detected("rwt: pay-extra");
         }
 
-        if (ANYONE_HAVE.matcher(originalText).find() && containsHighValueItemTrade(originalText)) {
-            return DetectionResult.detected("rwt: anyone-have-item");
-        }
-
         if (HELLO_BUYING.matcher(originalText).find()) {
             return DetectionResult.detected("rwt: hello-buying");
         }
@@ -115,10 +103,6 @@ public class RWTDetector implements ISpamDetector {
 
     private boolean containsHighValueItemTrade(String text) {
         String lowerText = text.toLowerCase();
-
-        if (!lowerText.matches(".*(buy(ing)?|sell(ing)?|trade(ing)?).*")) {
-            return false;
-        }
 
         for (String item : HIGH_VALUE_ITEMS) {
             if (lowerText.contains(item) && BUYING_PATTERN.matcher(text).find()) {

@@ -3,6 +3,7 @@ package com.antispam.detectors.impl;
 import com.antispam.detectors.DetectionResult;
 import com.antispam.detectors.ISpamDetector;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -110,7 +111,7 @@ public class KeywordSpamDetector implements ISpamDetector {
         return false;
     }
 
-    private boolean hasNegationBefore(String text, String keyword) {
+    private boolean hasNegationBefore(@Nonnull String text, @Nonnull String keyword) {
         String lowerText = text.toLowerCase();
         String lowerKeyword = keyword.toLowerCase();
 

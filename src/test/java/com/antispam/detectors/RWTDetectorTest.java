@@ -166,17 +166,6 @@ public class RWTDetectorTest {
         assertFalse(result.isDetected());
     }
 
-    @Test
-    public void testNullText() {
-        DetectionResult result = detector.detect(null, "");
-        assertFalse(result.isDetected());
-    }
-
-    @Test
-    public void testEmptyText() {
-        DetectionResult result = detector.detect("", "");
-        assertFalse(result.isDetected());
-    }
 
     @Test
     public void testCaseInsensitive() {

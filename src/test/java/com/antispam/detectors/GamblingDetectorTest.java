@@ -182,20 +182,44 @@ public class GamblingDetectorTest {
     }
 
     @Test
-    public void testNullText() {
-        DetectionResult result = detector.detect(null, "");
-        assertFalse(result.isDetected());
-    }
-
-    @Test
-    public void testEmptyText() {
-        DetectionResult result = detector.detect("", "");
-        assertFalse(result.isDetected());
-    }
-
-    @Test
     public void testCaseInsensitive() {
         DetectionResult result = detector.detect("DOUBLING MONEY 100M MAX", "");
         assertTrue(result.isDetected());
+    }
+
+    @Test
+    public void testHCurrencyWithPotOnly() {
+        // H_CURRENCY true, pot true, roll false
+        DetectionResult result = detector.detect("the pot is 500H", "");
+        assertTrue(result.isDetected());
+        assertEquals("gambling: h-currency", result.getKeyword());
+    }
+
+    @Test
+    public void testHCurrencyWithRollOnly() {
+        // H_CURRENCY true, pot false, roll true (use "roll" in text without matching SIMPLE_ROLL)
+        DetectionResult result = detector.detect("come roll with us 100H", "");
+        assertTrue(result.isDetected());
+        assertEquals("gambling: h-currency", result.getKeyword());
+    }
+
+    @Test
+    public void testHCurrencyWithBothPotAndRoll() {
+        // H_CURRENCY true, pot true, roll true
+        DetectionResult result = detector.detect("roll for pot 250H", "");
+        assertTrue(result.isDetected());
+        assertEquals("gambling: h-currency", result.getKeyword());
+    }
+
+    @Test
+    public void testHCurrencyWithoutPotOrRoll() {
+        DetectionResult result = detector.detect("trading 500H", "");
+        assertFalse(result.isDetected());
+    }
+
+    @Test
+    public void testNoHCurrency() {
+        DetectionResult result = detector.detect("pot is 500m", "");
+        assertFalse(result.isDetected());
     }
 }

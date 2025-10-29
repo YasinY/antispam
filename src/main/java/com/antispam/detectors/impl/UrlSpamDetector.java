@@ -3,6 +3,7 @@ package com.antispam.detectors.impl;
 import com.antispam.detectors.DetectionResult;
 import com.antispam.detectors.ISpamDetector;
 
+import javax.annotation.Nonnull;
 import java.util.regex.Pattern;
 
 /**
@@ -59,7 +60,7 @@ public class UrlSpamDetector implements ISpamDetector {
     );
 
     @Override
-    public DetectionResult detect(String originalText, String normalizedText) {
+    public DetectionResult detect(@Nonnull String originalText, String normalizedText) {
         String pattern = getDetectedUrlPattern(originalText);
         if (pattern != null) {
             return DetectionResult.detected(pattern);
@@ -67,8 +68,8 @@ public class UrlSpamDetector implements ISpamDetector {
         return DetectionResult.notDetected();
     }
 
-    private String getDetectedUrlPattern(String text) {
-        if (text == null || text.isEmpty()) {
+    private String getDetectedUrlPattern(@Nonnull String text) {
+        if (text.isEmpty()) {
             return null;
         }
 

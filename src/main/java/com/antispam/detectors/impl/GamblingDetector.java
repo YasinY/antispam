@@ -3,6 +3,7 @@ package com.antispam.detectors.impl;
 import com.antispam.detectors.DetectionResult;
 import com.antispam.detectors.ISpamDetector;
 
+import javax.annotation.Nonnull;
 import java.util.regex.Pattern;
 
 // TODO extract patterns to a separate file to reduce bloat
@@ -84,11 +85,7 @@ public class GamblingDetector implements ISpamDetector {
     );
 
     @Override
-    public DetectionResult detect(String originalText, String normalizedText) {
-        if (originalText == null || originalText.isEmpty()) {
-            return DetectionResult.notDetected();
-        }
-
+    public DetectionResult detect(@Nonnull String originalText, String normalizedText) {
         if (ROLL_PATTERN.matcher(originalText).find()) {
             return DetectionResult.detected("gambling: roll");
         }
